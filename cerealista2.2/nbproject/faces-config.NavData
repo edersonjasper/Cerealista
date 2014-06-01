@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Scene Scope="Project" version="2">
+    <Scope Scope="Faces Configuration Only"/>
+    <Scope Scope="Project">
+        <Node id="logar.jsp" x="135" y="270" zoom="true"/>
+        <Node id="addPessoa.jsp" x="78" y="954" zoom="true"/>
+        <Node id="venda.jsp" x="1549" y="474" zoom="true"/>
+        <Node id="despesa.jsp" x="-317" y="388" zoom="true"/>
+        <Node id="topo.jsp" x="150" y="450" zoom="true"/>
+        <Node id="addProdutoVenda.jsp" x="1932" y="587" zoom="true"/>
+        <Node id="addPagamentoOrdem.jsp" x="1784" y="188" zoom="true"/>
+        <Node id="produto.jsp" x="697" y="633" zoom="true"/>
+        <Node id="quebra.jsp" x="840" y="697" zoom="true"/>
+        <Node id="backup.jsp" x="150" y="600" zoom="true"/>
+        <Node id="pessoa.jsp" x="470" y="854" zoom="false"/>
+        <Node id="pagamentoOrdem.jsp" x="1527" y="278" zoom="true"/>
+        <Node id="addProduto.jsp" x="1104" y="688" zoom="true"/>
+        <Node id="addFormaPagamento.jsp" x="1192" y="634" zoom="true"/>
+        <Node id="pagamentoFuncioario.jsp" x="-314" y="557" zoom="true"/>
+        <Node id="ordem.jsp" x="1267" y="197" zoom="true"/>
+        <Node id="addCategoria.jsp" x="-329" y="723" zoom="true"/>
+        <Node id="telefone.jsp" x="217" y="1042" zoom="true"/>
+        <Node id="tipotelefone.jsp" x="101" y="761" zoom="true"/>
+        <Node id="addOrdem.jsp" x="1424" y="55" zoom="true"/>
+        <Node id="conta.jsp" x="386" y="1073" zoom="true"/>
+        <Node id="imprimiOrdem.jsp" x="1092" y="101" zoom="true"/>
+        <Node id="ordemProduto.jsp" x="1491" y="129" zoom="true"/>
+        <Node id="banco.jsp" x="-324" y="347" zoom="true"/>
+        <Node id="addHorastrabalhadas.jsp" x="-576" y="624" zoom="true"/>
+        <Node id="pesqOrdem.jsp" x="922" y="183" zoom="true"/>
+        <Node id="addVenda.jsp" x="1687" y="646" zoom="true"/>
+        <Node id="addUnidadeMedida.jsp" x="1170" y="555" zoom="true"/>
+        <Node id="addUsuario.jsp" x="1153" y="403" zoom="true"/>
+        <Node id="cidade.jsp" x="-5" y="720" zoom="true"/>
+        <Node id="addCategoriaDespesa.jsp" x="-626" y="514" zoom="true"/>
+        <Node id="formaPagamento.jsp" x="942" y="609" zoom="true"/>
+        <Node id="addCaixa.jsp" x="-526" y="442" zoom="true"/>
+        <Node id="addTipoTelefone.jsp" x="-98" y="824" zoom="true"/>
+        <Node id="menu.jsp" x="650" y="150" zoom="true"/>
+        <Node id="addQuebra.jsp" x="911" y="752" zoom="true"/>
+        <Node id="addVeiculo.jsp" x="1168" y="485" zoom="true"/>
+        <Node id="unidadeMedida.jsp" x="940" y="551" zoom="true"/>
+        <Node id="addBanco.jsp" x="-561" y="339" zoom="true"/>
+        <Node id="addPessoaCategoria.jsp" x="-400" y="940" zoom="true"/>
+        <Node id="addOrdemProduto.jsp" x="1684" y="82" zoom="true"/>
+        <Node id="tagLib.jsp" x="400" y="150" zoom="true"/>
+        <Node id="addCidade.jsp" x="-138" y="768" zoom="true"/>
+        <Node id="addConta.jsp" x="319" y="1147" zoom="true"/>
+        <Node id="veiculo.jsp" x="929" y="475" zoom="true"/>
+        <Node id="usuario.jsp" x="946" y="417" zoom="true"/>
+        <Node id="forwardToJSF.jsp" x="394" y="-28" zoom="true"/>
+        <Node id="tipoTelefone.jsp" x="400" y="450" zoom="true"/>
+        <Node id="horasTrabalhadas.jsp" x="-56" y="485" zoom="true"/>
+        <Node id="paginacao.jsp" x="150" y="300" zoom="true"/>
+        <Node id="welcomeJSF.jsp" x="434" y="318" zoom="true"/>
+        <Node id="addDespesa.jsp" x="-546" y="387" zoom="true"/>
+        <Node id="saldoCaixa.jsp" x="150" y="150" zoom="true"/>
+        <Node id="include.jsp" x="650" y="300" zoom="true"/>
+        <Node id="addTelefone.jsp" x="7" y="1078" zoom="true"/>
+        <Node id="addPagamentoFuncionario.jsp" x="-627" y="567" zoom="true"/>
+        <Node id="produtoVenda.jsp" x="1715" y="585" zoom="true"/>
+        <Node id="pessoaCategoria.jsp" x="-129" y="900" zoom="true"/>
+        <Node id="categoria.jsp" x="-139" y="684" zoom="true"/>
+        <Node id="caixa.jsp" x="-313" y="441" zoom="true"/>
+        <Node id="imprimiVenda.jsp" x="1442" y="746" zoom="true"/>
+        <Node id="categoriaDespesa.jsp" x="-341" y="488" zoom="true"/>
+    </Scope>
+    <Scope Scope="All Faces Configurations"/>
+</Scene>

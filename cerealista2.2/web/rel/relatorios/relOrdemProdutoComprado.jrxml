@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="OrdemProdutoComprado" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="dataIni" class="java.util.Date"/>
+	<parameter name="dataFin" class="java.util.Date"/>
+	<queryString>
+		<![CDATA[SELECT
+     ordem."ord_data" AS ordem_ord_data,
+     ordem_produto."ord_pro_valor_unitario" AS ordem_produto_ord_pro_valor_unitario,
+     ordem_produto."ord_pro_valor_total" AS ordem_produto_ord_pro_valor_total,
+     ordem_produto."ord_pro_quantidade" AS ordem_produto_ord_pro_quantidade,
+     ordem_produto."ord_pro_peso_unitario" AS ordem_produto_ord_pro_peso_unitario,
+     ordem_produto."ord_pro_peso_total" AS ordem_produto_ord_pro_peso_total,
+     produto."pro_nome" AS produto_pro_nome
+FROM
+     "public"."ordem" ordem INNER JOIN "public"."ordem_produto" ordem_produto ON ordem."ord_codigo" = ordem_produto."ord_codigo"
+     INNER JOIN "public"."produto" produto ON ordem_produto."pro_codigo" = produto."pro_codigo"
+WHERE
+     ordem."ord_data" >= $P{dataIni}
+ AND ordem."ord_data" <= $P{dataFin}
+ORDER BY
+     produto."pro_nome" ASC,
+     ordem."ord_data" ASC]]>
+	</queryString>
+	<field name="ordem_ord_data" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ordem_produto_ord_pro_valor_unitario" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ordem_produto_ord_pro_valor_total" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ordem_produto_ord_pro_quantidade" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ordem_produto_ord_pro_peso_unitario" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ordem_produto_ord_pro_peso_total" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="produto_pro_nome" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<variable name="quantidade" class="java.math.BigDecimal" resetType="Group" resetGroup="GrupProduto" calculation="Sum">
+		<variableExpression><![CDATA[$F{ordem_produto_ord_pro_quantidade}]]></variableExpression>
+	</variable>
+	<variable name="pesoTotal" class="java.math.BigDecimal" resetType="Group" resetGroup="GrupProduto" calculation="Sum">
+		<variableExpression><![CDATA[$F{ordem_produto_ord_pro_peso_total}]]></variableExpression>
+	</variable>
+	<variable name="valorTotal" class="java.math.BigDecimal" resetType="Group" resetGroup="GrupProduto" calculation="Sum">
+		<variableExpression><![CDATA[$F{ordem_produto_ord_pro_valor_total}]]></variableExpression>
+	</variable>
+	<variable name="quantidadeTotal" class="java.math.BigDecimal" incrementType="Group" incrementGroup="GrupProduto" calculation="Sum">
+		<variableExpression><![CDATA[$V{quantidade}]]></variableExpression>
+	</variable>
+	<variable name="pesoTotalGeral" class="java.math.BigDecimal" incrementType="Group" incrementGroup="GrupProduto" calculation="Sum">
+		<variableExpression><![CDATA[$V{pesoTotal}]]></variableExpression>
+	</variable>
+	<variable name="valorTotalGeral" class="java.math.BigDecimal" incrementType="Group" incrementGroup="GrupProduto" calculation="Sum">
+		<variableExpression><![CDATA[$V{valorTotal}]]></variableExpression>
+	</variable>
+	<group name="GrupProduto" isReprintHeaderOnEachPage="true">
+		<groupExpression><![CDATA[$F{produto_pro_nome}]]></groupExpression>
+		<groupHeader>
+			<band height="50">
+				<staticText>
+					<reportElement x="0" y="3" width="46" height="20"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<text><![CDATA[Produto:]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="47" y="3" width="161" height="20"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{produto_pro_nome}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="0" y="24" width="555" height="1"/>
+				</line>
+				<staticText>
+					<reportElement x="0" y="25" width="24" height="20"/>
+					<textElement textAlignment="Right"/>
+					<text><![CDATA[Data]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="77" y="25" width="61" height="20"/>
+					<textElement textAlignment="Right"/>
+					<text><![CDATA[Quantidade]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="191" y="25" width="51" height="20"/>
+					<textElement textAlignment="Right"/>
+					<text><![CDATA[Peso Unit.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="295" y="25" width="51" height="20"/>
+					<textElement textAlignment="Right"/>
+					<text><![CDATA[Peso total]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="399" y="25" width="51" height="20"/>
+					<textElement textAlignment="Right"/>
+					<text><![CDATA[Valor Unit.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="504" y="25" width="51" height="20"/>
+					<textElement textAlignment="Right"/>
+					<text><![CDATA[Valor total]]></text>
+				</staticText>
+				<line>
+					<reportElement x="0" y="47" width="555" height="1"/>
+				</line>
+				<line>
+					<reportElement x="-2" y="2" width="555" height="1"/>
+				</line>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="30">
+				<textField pattern="#,##0.00">
+					<reportElement x="77" y="6" width="61" height="20"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{quantidade}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="0" y="2" width="555" height="1"/>
+				</line>
+				<staticText>
+					<reportElement x="9" y="6" width="56" height="20"/>
+					<textElement/>
+					<text><![CDATA[Total:]]></text>
+				</staticText>
+				<textField pattern="#,##0.00">
+					<reportElement x="276" y="6" width="72" height="20"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{pesoTotal}]]></textFieldExpression>
+				</textField>
+				<textField pattern="¤ #,##0.00">
+					<reportElement x="461" y="6" width="94" height="20"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{valorTotal}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="73" splitType="Stretch">
+			<staticText>
+				<reportElement x="207" y="25" width="141" height="28"/>
+				<textElement>
+					<font size="16"/>
+				</textElement>
+				<text><![CDATA[Produto Comprado]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy HH.mm.ss">
+				<reportElement x="404" y="33" width="129" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="4" y="33" width="61" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.util.Date"><![CDATA[$P{dataIni}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="94" y="33" width="65" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.util.Date"><![CDATA[$P{dataFin}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="68" y="33" width="22" height="20"/>
+				<textElement/>
+				<text><![CDATA[até]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="0" y="0" width="65" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{ordem_ord_data}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="77" y="0" width="61" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{ordem_produto_ord_pro_quantidade}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="191" y="0" width="51" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{ordem_produto_ord_pro_peso_unitario}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="299" y="0" width="49" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{ordem_produto_ord_pro_peso_total}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="396" y="0" width="54" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{ordem_produto_ord_pro_valor_unitario}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="461" y="0" width="94" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{ordem_produto_ord_pro_valor_total}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="34" splitType="Stretch">
+			<textField>
+				<reportElement x="428" y="8" width="80" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA["Pag. "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="508" y="8" width="40" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="3" width="555" height="1"/>
+			</line>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="32" splitType="Stretch">
+			<textField pattern="#,##0.00">
+				<reportElement x="65" y="4" width="73" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{quantidadeTotal}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="4" width="65" height="20"/>
+				<textElement/>
+				<text><![CDATA[Total Geral:]]></text>
+			</staticText>
+			<textField pattern="#,##0.00">
+				<reportElement x="207" y="4" width="141" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{pesoTotalGeral}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="399" y="4" width="156" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{valorTotalGeral}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="2" width="555" height="1"/>
+			</line>
+		</band>
+	</summary>
+</jasperReport>

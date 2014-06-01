@@ -1,0 +1,934 @@
+CREATE TABLE usuario
+(
+  usu_codigo integer NOT NULL,
+  usu_usuario character varying(40) NOT NULL,
+  usu_senha character varying(20) NOT NULL,
+  usu_nome character varying(40) NOT NULL,
+  usu_status "char" NOT NULL,
+  CONSTRAINT pk_usuario PRIMARY KEY (usu_codigo)
+)
+WITH OIDS;
+ALTER TABLE usuario OWNER TO postgres;
+-- Table: veiculo
+
+-- DROP TABLE veiculo;
+
+
+-- Table: acao
+
+-- DROP TABLE acao;
+
+CREATE TABLE acao
+(
+  aca_codigo integer NOT NULL,
+  aca_descricao character varying(20) NOT NULL,
+  CONSTRAINT pk_acao PRIMARY KEY (aca_codigo)
+)
+WITH OIDS;
+ALTER TABLE acao OWNER TO postgres;
+
+
+
+-- Table: acesso
+
+-- DROP TABLE acesso;
+
+CREATE TABLE acesso
+(
+  ace_codigo integer NOT NULL,
+  ace_descricao character varying(30) NOT NULL,
+  CONSTRAINT pk_acesso PRIMARY KEY (ace_codigo)
+)
+WITH OIDS;
+ALTER TABLE acesso OWNER TO postgres;
+
+
+-- Table: acesso_usuario
+
+-- DROP TABLE acesso_usuario;
+
+CREATE TABLE acesso_usuario
+(
+  ace_codigo integer NOT NULL,
+  usu_codigo integer NOT NULL,
+  ace_usu_codigo integer NOT NULL,
+  CONSTRAINT pk_acesso_usuario PRIMARY KEY (ace_usu_codigo),
+  CONSTRAINT fk_acesso_usuario FOREIGN KEY (ace_codigo)
+      REFERENCES acesso (ace_codigo) MATCH SIMPLE
+      ON UPDATE RESTRICT ON DELETE RESTRICT,
+  CONSTRAINT fk_usuario_acesso FOREIGN KEY (usu_codigo)
+      REFERENCES usuario (usu_codigo) MATCH SIMPLE
+      ON UPDATE RESTRICT ON DELETE RESTRICT
+)
+WITH OIDS;
+ALTER TABLE acesso_usuario OWNER TO postgres;
+
+-- Index: ix_fk_acesso_usuario
+
+-- DROP INDEX ix_fk_acesso_usuario;
+
+CREATE INDEX ix_fk_acesso_usuario
+  ON acesso_usuario
+  USING btree
+  (ace_codigo);
+
+-- Index: ix_fk_usuario_acesso
+
+-- DROP INDEX ix_fk_usuario_acesso;
+
+CREATE INDEX ix_fk_usuario_acesso
+  ON acesso_usuario
+  USING btree
+  (usu_codigo);
+
+
+
+-- Table: auditoria
+
+-- DROP TABLE auditoria;
+
+CREATE TABLE auditoria
+(
+  aud_codigo double precision NOT NULL,
+  aud_data date NOT NULL,
+  aud_campo character varying(40) NOT NULL,
+  aud_tabela character varying(30) NOT NULL,
+  aud_codigo_registro double precision NOT NULL,
+  usu_codigo integer NOT NULL,
+  aca_codigo integer NOT NULL,
+  CONSTRAINT pk_auditoria PRIMARY KEY (aud_codigo, usu_codigo, aca_codigo),
+  CONSTRAINT fk_acao_auditoria FOREIGN KEY (aca_codigo)
+      REFERENCES acao (aca_codigo) MATCH SIMPLE
+      ON UPDATE RESTRICT ON DELETE RESTRICT,
+  CONSTRAINT fk_usuario_auditoria FOREIGN KEY (usu_codigo)
+      REFERENCES usuario (usu_codigo) MATCH SIMPLE
+      ON UPDATE RESTRICT ON DELETE RESTRICT
+)
+WITH OIDS;
+ALTER TABLE auditoria OWNER TO postgres;
+
+-- Index: ix_fk_acao_auditoria
+
+-- DROP INDEX ix_fk_acao_auditoria;
+
+CREATE INDEX ix_fk_acao_auditoria
+  ON auditoria
+  USING btree
+  (aca_codigo);
+
+-- Index: ix_fk_usuario_auditoria
+
+-- DROP INDEX ix_fk_usuario_auditoria;
+
+CREATE INDEX ix_fk_usuario_auditoria
+  ON auditoria
+  USING btree
+  (usu_codigo);
+
+-- Table: autenticacao
+
+-- DROP TABLE autenticacao;
+
+CREATE TABLE autenticacao
+(
+  aut_codigo double precision NOT NULL,
+  aut_data date NOT NULL,
+  aut_usuario character varying(40) NOT NULL,
+  aut_senha character varying(30) NOT NULL,
+  aut_acerto character(1) NOT NULL,
+  usu_codigo integer NOT NULL,
+  CONSTRAINT pk_autenticacao PRIMARY KEY (aut_codigo)
+)
+WITH OIDS;
+ALTER TABLE autenticacao OWNER TO postgres;
+-- Table: banco
+
+-- DROP TABLE banco;
+
+CREATE TABLE banco
+(
+  ban_codigo integer NOT NULL,
+  ban_nome character varying(40) NOT NULL,
+  CONSTRAINT pk_banco PRIMARY KEY (ban_codigo)
+)
+WITHOUT OIDS;
+ALTER TABLE banco OWNER TO postgres;
+-- Table: caixa
+
+-- DROP TABLE caixa;
+
+CREATE TABLE caixa
+(
+  cai_codigo integer NOT NULL,
+  usu_codigo integer NOT NULL,
+  cai_valor_depositado numeric(15,5) NOT NULL,
+  cai_data date NOT NULL,
+  CONSTRAINT pk_caixa PRIMARY KEY (cai_codigo, usu_codigo),
+  CONSTRAINT fk_usuario_caixa FOREIGN KEY (usu_codigo)
+      REFERENCES usuario (usu_codigo) MATCH SIMPLE
+      ON UPDATE RESTRICT ON DELETE RESTRICT
+)
+WITH OIDS;
+ALTER TABLE caixa OWNER TO postgres;
+
+-- Index: ix_fk_usuario_caixa
+
+-- DROP INDEX ix_fk_usuario_caixa;
+
+CREATE INDEX ix_fk_usuario_caixa
+  ON caixa
+  USING btree
+  (usu_codigo);
+
+-- Table: categoria
+
+-- DROP TABLE categoria;
+
+CREATE TABLE categoria
+(
+  cat_codigo integer NOT NULL,
+  cat_descricao character varying(20) NOT NULL,
+  CONSTRAINT pk_categoria PRIMARY KEY (cat_codigo)
+)
+WITH OIDS;
+ALTER TABLE categoria OWNER TO postgres;
+-- Table: categoria_despesa
+
+-- DROP TABLE categoria_despesa;
+
+CREATE TABLE categoria_despesa
+(
+  cat_des_codigo integer NOT NULL,
+  cat_des_descricao character varying(40) NOT NULL,
+  CONSTRAINT pk_categoria_despesa PRIMARY KEY (cat_des_codigo)
+)
+WITH OIDS;
+ALTER TABLE categoria_despesa OWNER TO postgres;
+-- Table: cidade
+
+-- DROP TABLE cidade;
+
+CREATE TABLE cidade
+(
+  cid_codigo integer NOT NULL,
+  cid_nome character varying(40) NOT NULL,
+  cid_uf character(2) NOT NULL,
+  CONSTRAINT pk_cidade PRIMARY KEY (cid_codigo)
+)
+WITH OIDS;
+ALTER TABLE cidade OWNER TO postgres;
+
+-- Table: pessoa
+
+-- DROP TABLE pessoa;
+
+CREATE TABLE pessoa
+(
+  pes_codigo integer NOT NULL,
+  pes_nome character varying(40) NOT NULL,
+  pes_sexo character(1) NOT NULL,
+  pes_cpf_cnpj character varying(20) NOT NULL,
+  pes_ie character varying(20),
+  pes_endereco character varying(40) NOT NULL,
+  pes_bairro character varying(40) NOT NULL,
+  pes_numero integer,
+  pes_cep character(9) NOT NULL,
+  pes_nascimento date,
+  cid_codigo integer NOT NULL,
+  usu_codigo integer NOT NULL,
+  pes_oculto character(1),
+  pes_tipo character(1) NOT NULL,
+  CONSTRAINT pk_pessoa PRIMARY KEY (pes_codigo),
+  CONSTRAINT fk_cidade_pessoa FOREIGN KEY (cid_codigo)
+      REFERENCES cidade (cid_codigo) MATCH SIMPLE
+      ON UPDATE RESTRICT ON DELETE RESTRICT,
+  CONSTRAINT fk_usuario_pessoa FOREIGN KEY (usu_codigo)
+      REFERENCES usuario (usu_codigo) MATCH SIMPLE
+      ON UPDATE RESTRICT ON DELETE RESTRICT
+)
+WITH OIDS;
+ALTER TABLE pessoa OWNER TO postgres;
+
+-- Index: ix_fk_cidade_pessoa
+
+-- DROP INDEX ix_fk_cidade_pessoa;
+
+CREATE INDEX ix_fk_cidade_pessoa
+  ON pessoa
+  USING btree
+  (cid_codigo);
+
+-- Index: ix_fk_usuario_pessoa
+
+-- DROP INDEX ix_fk_usuario_pessoa;
+
+CREATE INDEX ix_fk_usuario_pessoa
+  ON pessoa
+  USING btree
+  (usu_codigo);
+
+-- Table: pessoa_categoria
+
+-- DROP TABLE pessoa_categoria;
+
+CREATE TABLE pessoa_categoria
+(
+  pes_codigo integer NOT NULL,
+  cat_codigo integer NOT NULL,
+  pes_cat_codigo integer NOT NULL,
+  CONSTRAINT pk_pessoa_categoria PRIMARY KEY (pes_cat_codigo),
+  CONSTRAINT fk_categoria_pessoa_categoria FOREIGN KEY (cat_codigo)
+      REFERENCES categoria (cat_codigo) MATCH SIMPLE
+      ON UPDATE RESTRICT ON DELETE RESTRICT,
+  CONSTRAINT fk_pessoa_pessoa_categoria FOREIGN KEY (pes_codigo)
+      REFERENCES pessoa (pes_codigo) MATCH SIMPLE
+      ON UPDATE RESTRICT ON DELETE RESTRICT
+)
+WITH OIDS;
+ALTER TABLE pessoa_categoria OWNER TO postgres;
+
+-- Index: ix_fk_categoria_pessoa_categoria
+
+-- DROP INDEX ix_fk_categoria_pessoa_categoria;
+
+CREATE INDEX ix_fk_categoria_pessoa_categoria
+  ON pessoa_categoria
+  USING btree
+  (cat_codigo);
+
+-- Index: ix_fk_pessoa_pessoa_categoria
+
+-- DROP INDEX ix_fk_pessoa_pessoa_categoria;
+
+CREATE INDEX ix_fk_pessoa_pessoa_categoria
+  ON pessoa_categoria
+  USING btree
+  (pes_codigo);
+
+
+
+-- Table: conta
+
+-- DROP TABLE conta;
+
+CREATE TABLE conta
+(
+  con_codigo integer NOT NULL,
+  con_numero_conta character varying(20) NOT NULL,
+  con_agencia character varying(20) NOT NULL,
+  con_operacao character varying(20) NOT NULL,
+  con_numero_banco integer,
+  con_nome_deposito character varying(40) NOT NULL,
+  pes_codigo integer NOT NULL,
+  ban_codigo integer NOT NULL,
+  CONSTRAINT pk_conta PRIMARY KEY (con_codigo, pes_codigo),
+  CONSTRAINT fk_pessoa_conta FOREIGN KEY (pes_codigo)
+      REFERENCES pessoa (pes_codigo) MATCH SIMPLE
+      ON UPDATE RESTRICT ON DELETE RESTRICT
+)
+WITH OIDS;
+ALTER TABLE conta OWNER TO postgres;
+
+-- Index: ix_fk_pessoa_conta
+
+-- DROP INDEX ix_fk_pessoa_conta;
+
+CREATE INDEX ix_fk_pessoa_conta
+  ON conta
+  USING btree
+  (pes_codigo);
+
+-- Table: despesa
+
+-- DROP TABLE despesa;
+
+CREATE TABLE despesa
+(
+  des_codigo integer NOT NULL,
+  cat_des_codigo integer NOT NULL,
+  usu_codigo integer NOT NULL,
+  des_valor numeric(15,2) NOT NULL,
+  des_data date NOT NULL,
+  des_descricao character varying(100),
+  CONSTRAINT pk_despesa PRIMARY KEY (des_codigo),
+  CONSTRAINT fk_categoria_despesa_despesa FOREIGN KEY (cat_des_codigo)
+      REFERENCES categoria_despesa (cat_des_codigo) MATCH SIMPLE
+      ON UPDATE RESTRICT ON DELETE RESTRICT,
+  CONSTRAINT fk_usuario_despesa FOREIGN KEY (usu_codigo)
+      REFERENCES usuario (usu_codigo) MATCH SIMPLE
+      ON UPDATE RESTRICT ON DELETE RESTRICT
+)
+WITH OIDS;
+ALTER TABLE despesa OWNER TO postgres;
+
+-- Index: ix_fk_categoria_despesa_despesa
+
+-- DROP INDEX ix_fk_categoria_despesa_despesa;
+
+CREATE INDEX ix_fk_categoria_despesa_despesa
+  ON despesa
+  USING btree
+  (cat_des_codigo);
+
+-- Index: ix_fk_usuario_despesa
+
+-- DROP INDEX ix_fk_usuario_despesa;
+
+CREATE INDEX ix_fk_usuario_despesa
+  ON despesa
+  USING btree
+  (usu_codigo);
+
+-- Table: forma_pagamento
+
+-- DROP TABLE forma_pagamento;
+
+CREATE TABLE forma_pagamento
+(
+  for_pag_codigo integer NOT NULL,
+  for_pag_descricao character varying(20) NOT NULL,
+  CONSTRAINT pk_forma_pagamento PRIMARY KEY (for_pag_codigo)
+)
+WITH OIDS;
+ALTER TABLE forma_pagamento OWNER TO postgres;
+-- Table: horas_trabalhadas
+
+-- DROP TABLE horas_trabalhadas;
+
+CREATE TABLE horas_trabalhadas
+(
+  hor_tra_codigo integer NOT NULL,
+  hor_tra_valor_hora numeric(15,2) NOT NULL,
+  hor_tra_data date NOT NULL,
+  hor_tra_descricao text,
+  hor_tra_valor_total numeric(15,2) NOT NULL,
+  pes_cat_codigo integer NOT NULL,
+  hor_tra_horas_trabalhadas numeric(10,2) NOT NULL,
+  CONSTRAINT pk_horas_trabalhadas PRIMARY KEY (hor_tra_codigo, pes_cat_codigo),
+  CONSTRAINT fk_pessoa_categoria_horas_trabalhadas FOREIGN KEY (pes_cat_codigo)
+      REFERENCES pessoa_categoria (pes_cat_codigo) MATCH SIMPLE
+      ON UPDATE RESTRICT ON DELETE RESTRICT
+)
+WITH OIDS;
+ALTER TABLE horas_trabalhadas OWNER TO postgres;
+
+-- Index: ix_fk_pessoa_categoria_horas_trabalhadas
+
+-- DROP INDEX ix_fk_pessoa_categoria_horas_trabalhadas;
+
+CREATE INDEX ix_fk_pessoa_categoria_horas_trabalhadas
+  ON horas_trabalhadas
+  USING btree
+  (pes_cat_codigo);
+
+-- Table: ordem
+
+-- DROP TABLE ordem;
+
+CREATE TABLE ordem
+(
+  ord_codigo integer NOT NULL,
+  usu_codigo integer NOT NULL,
+  ord_data date NOT NULL,
+  ord_data_vencimento date NOT NULL,
+  ord_peso_total numeric(15,3),
+  ord_valor_total numeric(15,2),
+  ord_fundo_rural numeric(15,2),
+  ord_desconto numeric(15,2),
+  ord_adiantamento numeric(15,2),
+  ord_valor_restante numeric(15,2),
+  ord_pago character(1),
+  pes_cat_codigo integer NOT NULL,
+  ord_aberta character(1),
+  CONSTRAINT pk_ordem PRIMARY KEY (ord_codigo),
+  CONSTRAINT fk_pessoa_categoria_ordem FOREIGN KEY (pes_cat_codigo)
+      REFERENCES pessoa_categoria (pes_cat_codigo) MATCH SIMPLE
+      ON UPDATE RESTRICT ON DELETE RESTRICT,
+  CONSTRAINT fk_usuario_ordem FOREIGN KEY (usu_codigo)
+      REFERENCES usuario (usu_codigo) MATCH SIMPLE
+      ON UPDATE RESTRICT ON DELETE RESTRICT
+)
+WITH OIDS;
+ALTER TABLE ordem OWNER TO postgres;
+
+-- Index: ix_fk_pessoa_categoria_ordem
+
+-- DROP INDEX ix_fk_pessoa_categoria_ordem;
+
+CREATE INDEX ix_fk_pessoa_categoria_ordem
+  ON ordem
+  USING btree
+  (pes_cat_codigo);
+
+-- Index: ix_fk_usuario_ordem
+
+-- DROP INDEX ix_fk_usuario_ordem;
+
+CREATE INDEX ix_fk_usuario_ordem
+  ON ordem
+  USING btree
+  (usu_codigo);
+
+
+-- Table: unidade_medida
+
+-- DROP TABLE unidade_medida;
+
+CREATE TABLE unidade_medida
+(
+  uni_med_codigo integer NOT NULL,
+  uni_med_descricao character varying(10) NOT NULL,
+  CONSTRAINT pk_unidade_medida PRIMARY KEY (uni_med_codigo)
+)
+WITH OIDS;
+ALTER TABLE unidade_medida OWNER TO postgres;
+
+  
+  -- Table: produto
+
+-- DROP TABLE produto;
+
+CREATE TABLE produto
+(
+  pro_codigo integer NOT NULL,
+  uni_med_codigo integer NOT NULL,
+  pro_nome character varying(40) NOT NULL,
+  pro_estoque numeric(15,3),
+  CONSTRAINT pk_produto PRIMARY KEY (pro_codigo),
+  CONSTRAINT fk_unidade_medida_produto FOREIGN KEY (uni_med_codigo)
+      REFERENCES unidade_medida (uni_med_codigo) MATCH SIMPLE
+      ON UPDATE RESTRICT ON DELETE RESTRICT
+)
+WITH OIDS;
+ALTER TABLE produto OWNER TO postgres;
+
+-- Index: ix_fk_unidade_medida_produto
+
+-- DROP INDEX ix_fk_unidade_medida_produto;
+
+CREATE INDEX ix_fk_unidade_medida_produto
+  ON produto
+  USING btree
+  (uni_med_codigo);
+
+
+-- Table: ordem_produto
+
+-- DROP TABLE ordem_produto;
+
+CREATE TABLE ordem_produto
+(
+  ord_pro_codigo integer NOT NULL,
+  pro_codigo integer NOT NULL,
+  usu_codigo integer NOT NULL,
+  ord_codigo integer NOT NULL,
+  ord_pro_quantidade numeric(15,5) NOT NULL,
+  ord_pro_valor_unitario numeric(15,2) NOT NULL,
+  ord_pro_valor_total numeric(15,2) NOT NULL,
+  ord_pro_peso_unitario numeric(15,3),
+  ord_pro_peso_total numeric(15,3),
+  CONSTRAINT pk_ordem_produto PRIMARY KEY (ord_pro_codigo, pro_codigo, usu_codigo, ord_codigo),
+  CONSTRAINT fk_ordem_ordem_produto FOREIGN KEY (ord_codigo)
+      REFERENCES ordem (ord_codigo) MATCH SIMPLE
+      ON UPDATE RESTRICT ON DELETE RESTRICT,
+  CONSTRAINT fk_produto_ordem_produto FOREIGN KEY (pro_codigo)
+      REFERENCES produto (pro_codigo) MATCH SIMPLE
+      ON UPDATE RESTRICT ON DELETE RESTRICT,
+  CONSTRAINT fk_usuario_ordem_produto FOREIGN KEY (usu_codigo)
+      REFERENCES usuario (usu_codigo) MATCH SIMPLE
+      ON UPDATE RESTRICT ON DELETE RESTRICT
+)
+WITH OIDS;
+ALTER TABLE ordem_produto OWNER TO postgres;
+
+-- Index: ix_fk_ordem_ordem_produto
+
+-- DROP INDEX ix_fk_ordem_ordem_produto;
+
+CREATE INDEX ix_fk_ordem_ordem_produto
+  ON ordem_produto
+  USING btree
+  (ord_codigo);
+
+-- Index: ix_fk_produto_ordem_produto
+
+-- DROP INDEX ix_fk_produto_ordem_produto;
+
+CREATE INDEX ix_fk_produto_ordem_produto
+  ON ordem_produto
+  USING btree
+  (pro_codigo);
+
+-- Index: ix_fk_usuario_ordem_produto
+
+-- DROP INDEX ix_fk_usuario_ordem_produto;
+
+CREATE INDEX ix_fk_usuario_ordem_produto
+  ON ordem_produto
+  USING btree
+  (usu_codigo);
+
+-- Table: pagamento_funcionario
+
+-- DROP TABLE pagamento_funcionario;
+
+CREATE TABLE pagamento_funcionario
+(
+  pag_fun_codigo integer NOT NULL,
+  usu_codigo integer NOT NULL,
+  pag_fun_valor numeric(15,2) NOT NULL,
+  pag_fun_data date NOT NULL,
+  pes_cat_codigo integer NOT NULL,
+  CONSTRAINT pk_pagamento_funcionario PRIMARY KEY (pag_fun_codigo, usu_codigo, pes_cat_codigo),
+  CONSTRAINT fk_pessoa_categoria_pagamento_funcionario FOREIGN KEY (pes_cat_codigo)
+      REFERENCES pessoa_categoria (pes_cat_codigo) MATCH SIMPLE
+      ON UPDATE RESTRICT ON DELETE RESTRICT,
+  CONSTRAINT fk_usuario_pagamento_funcionario FOREIGN KEY (usu_codigo)
+      REFERENCES usuario (usu_codigo) MATCH SIMPLE
+      ON UPDATE RESTRICT ON DELETE RESTRICT
+)
+WITH OIDS;
+ALTER TABLE pagamento_funcionario OWNER TO postgres;
+
+-- Index: ix_fk_pessoa_categoria_pagamento_funcionario
+
+-- DROP INDEX ix_fk_pessoa_categoria_pagamento_funcionario;
+
+CREATE INDEX ix_fk_pessoa_categoria_pagamento_funcionario
+  ON pagamento_funcionario
+  USING btree
+  (pes_cat_codigo);
+
+-- Index: ix_fk_usuario_pagamento_funcionario
+
+-- DROP INDEX ix_fk_usuario_pagamento_funcionario;
+
+CREATE INDEX ix_fk_usuario_pagamento_funcionario
+  ON pagamento_funcionario
+  USING btree
+  (usu_codigo);
+
+-- Table: pagamento_ordem
+
+-- DROP TABLE pagamento_ordem;
+
+CREATE TABLE pagamento_ordem
+(
+  pag_ord_codigo integer NOT NULL,
+  usu_codigo integer NOT NULL,
+  for_pag_codigo integer NOT NULL,
+  ord_codigo integer NOT NULL,
+  pag_ord_valor numeric(15,2) NOT NULL,
+  pag_ord_data date NOT NULL,
+  pag_ord_valor_acumulado numeric(15,2),
+  CONSTRAINT pk_pagamento_ordem PRIMARY KEY (pag_ord_codigo, usu_codigo, for_pag_codigo, ord_codigo),
+  CONSTRAINT fk_forma_pagamento_pagamento FOREIGN KEY (for_pag_codigo)
+      REFERENCES forma_pagamento (for_pag_codigo) MATCH SIMPLE
+      ON UPDATE RESTRICT ON DELETE RESTRICT,
+  CONSTRAINT fk_ordem_pagamento_ordem FOREIGN KEY (ord_codigo)
+      REFERENCES ordem (ord_codigo) MATCH SIMPLE
+      ON UPDATE RESTRICT ON DELETE RESTRICT,
+  CONSTRAINT fk_usuario_pagamento_ordem FOREIGN KEY (usu_codigo)
+      REFERENCES usuario (usu_codigo) MATCH SIMPLE
+      ON UPDATE RESTRICT ON DELETE RESTRICT
+)
+WITH OIDS;
+ALTER TABLE pagamento_ordem OWNER TO postgres;
+
+-- Index: ix_fk_forma_pagamento_pagamento
+
+-- DROP INDEX ix_fk_forma_pagamento_pagamento;
+
+CREATE INDEX ix_fk_forma_pagamento_pagamento
+  ON pagamento_ordem
+  USING btree
+  (for_pag_codigo);
+
+-- Index: ix_fk_ordem_pagamento_ordem
+
+-- DROP INDEX ix_fk_ordem_pagamento_ordem;
+
+CREATE INDEX ix_fk_ordem_pagamento_ordem
+  ON pagamento_ordem
+  USING btree
+  (ord_codigo);
+
+-- Index: ix_fk_usuario_pagamento_ordem
+
+-- DROP INDEX ix_fk_usuario_pagamento_ordem;
+
+CREATE INDEX ix_fk_usuario_pagamento_ordem
+  ON pagamento_ordem
+  USING btree
+  (usu_codigo);
+
+
+
+-- Table: usuario
+
+-- DROP TABLE usuario;
+
+CREATE TABLE veiculo
+(
+  vei_codigo integer NOT NULL,
+  vei_placa character(8) NOT NULL,
+  vei_veiculo character varying(50) NOT NULL,
+  pes_codigo integer NOT NULL,
+  cid_codigo integer NOT NULL,
+  CONSTRAINT pk_veiculo PRIMARY KEY (vei_codigo),
+  CONSTRAINT fk_cidade_veiculo FOREIGN KEY (cid_codigo)
+      REFERENCES cidade (cid_codigo) MATCH SIMPLE
+      ON UPDATE RESTRICT ON DELETE RESTRICT,
+  CONSTRAINT fk_pessoa_veiculo FOREIGN KEY (pes_codigo)
+      REFERENCES pessoa (pes_codigo) MATCH SIMPLE
+      ON UPDATE RESTRICT ON DELETE RESTRICT
+)
+WITH OIDS;
+ALTER TABLE veiculo OWNER TO postgres;
+
+-- Index: ix_fk_cidade_veiculo
+
+-- DROP INDEX ix_fk_cidade_veiculo;
+
+CREATE INDEX ix_fk_cidade_veiculo
+  ON veiculo
+  USING btree
+  (cid_codigo);
+
+-- Index: ix_fk_pessoa_veiculo
+
+-- DROP INDEX ix_fk_pessoa_veiculo;
+
+CREATE INDEX ix_fk_pessoa_veiculo
+  ON veiculo
+  USING btree
+  (pes_codigo);
+
+-- Table: venda
+
+-- DROP TABLE venda;
+
+CREATE TABLE venda
+(
+  ven_codigo integer NOT NULL,
+  vei_codigo integer NOT NULL,
+  usu_codigo integer NOT NULL,
+  ven_data date NOT NULL,
+  ven_data_entrega date NOT NULL,
+  ven_valor_total numeric(15,2),
+  ven_peso_total numeric(15,3),
+  ven_valor_frete numeric(15,2),
+  ven_icms numeric(15,2) NOT NULL,
+  ven_seguro numeric(15,2),
+  ven_valor_liquido numeric(15,2),
+  pes_cat_codigo integer NOT NULL,
+  CONSTRAINT pk_venda PRIMARY KEY (ven_codigo),
+  CONSTRAINT fk_pessoa_categoria_venda FOREIGN KEY (pes_cat_codigo)
+      REFERENCES pessoa_categoria (pes_cat_codigo) MATCH SIMPLE
+      ON UPDATE RESTRICT ON DELETE RESTRICT,
+  CONSTRAINT fk_usuario_venda FOREIGN KEY (usu_codigo)
+      REFERENCES usuario (usu_codigo) MATCH SIMPLE
+      ON UPDATE RESTRICT ON DELETE RESTRICT,
+  CONSTRAINT fk_veiculo_venda FOREIGN KEY (vei_codigo)
+      REFERENCES veiculo (vei_codigo) MATCH SIMPLE
+      ON UPDATE RESTRICT ON DELETE RESTRICT
+)
+WITH OIDS;
+ALTER TABLE venda OWNER TO postgres;
+
+-- Index: ix_fk_pessoa_categoria_venda
+
+-- DROP INDEX ix_fk_pessoa_categoria_venda;
+
+CREATE INDEX ix_fk_pessoa_categoria_venda
+  ON venda
+  USING btree
+  (pes_cat_codigo);
+
+-- Index: ix_fk_usuario_venda
+
+-- DROP INDEX ix_fk_usuario_venda;
+
+CREATE INDEX ix_fk_usuario_venda
+  ON venda
+  USING btree
+  (usu_codigo);
+
+-- Index: ix_fk_veiculo_venda
+
+-- DROP INDEX ix_fk_veiculo_venda;
+
+CREATE INDEX ix_fk_veiculo_venda
+  ON venda
+  USING btree
+  (vei_codigo);
+
+
+
+-- Table: produto_venda
+
+-- DROP TABLE produto_venda;
+
+CREATE TABLE produto_venda
+(
+  pro_codigo integer NOT NULL,
+  usu_codigo integer NOT NULL,
+  ven_codigo integer NOT NULL,
+  pro_ven_quantidade numeric(15,3) NOT NULL,
+  pro_ven_peso_unitario numeric(15,3) NOT NULL,
+  pro_ven_peso_total numeric(15,3) NOT NULL,
+  pro_ven_valor_unitario numeric(15,2),
+  pro_ven_valor_total numeric(15,2),
+  pro_ven_nome_fornecedor character varying(70),
+  pro_ven_codigo integer NOT NULL,
+  CONSTRAINT pk_produto_venda PRIMARY KEY (pro_codigo, usu_codigo, ven_codigo, pro_ven_codigo),
+  CONSTRAINT fk_produto_produto_venda FOREIGN KEY (pro_codigo)
+      REFERENCES produto (pro_codigo) MATCH SIMPLE
+      ON UPDATE RESTRICT ON DELETE RESTRICT,
+  CONSTRAINT fk_usuario_produto_venda FOREIGN KEY (usu_codigo)
+      REFERENCES usuario (usu_codigo) MATCH SIMPLE
+      ON UPDATE RESTRICT ON DELETE RESTRICT,
+  CONSTRAINT fk_venda_produto_venda FOREIGN KEY (ven_codigo)
+      REFERENCES venda (ven_codigo) MATCH SIMPLE
+      ON UPDATE RESTRICT ON DELETE RESTRICT
+)
+WITH OIDS;
+ALTER TABLE produto_venda OWNER TO postgres;
+
+-- Index: ix_fk_produto_produto_venda
+
+-- DROP INDEX ix_fk_produto_produto_venda;
+
+CREATE INDEX ix_fk_produto_produto_venda
+  ON produto_venda
+  USING btree
+  (pro_codigo);
+
+-- Index: ix_fk_usuario_produto_venda
+
+-- DROP INDEX ix_fk_usuario_produto_venda;
+
+CREATE INDEX ix_fk_usuario_produto_venda
+  ON produto_venda
+  USING btree
+  (usu_codigo);
+
+-- Index: ix_fk_venda_produto_venda
+
+-- DROP INDEX ix_fk_venda_produto_venda;
+
+CREATE INDEX ix_fk_venda_produto_venda
+  ON produto_venda
+  USING btree
+  (ven_codigo);
+
+-- Table: quebra
+
+-- DROP TABLE quebra;
+
+CREATE TABLE quebra
+(
+  que_codigo integer NOT NULL,
+  usu_codigo integer NOT NULL,
+  pro_codigo integer NOT NULL,
+  que_quantidade numeric(15,3) NOT NULL,
+  que_peso_unitario numeric(15,3) NOT NULL,
+  que_peso_total numeric(15,3) NOT NULL,
+  que_data date NOT NULL,
+  CONSTRAINT pk_quebra PRIMARY KEY (que_codigo, usu_codigo, pro_codigo),
+  CONSTRAINT fk_produto_quebra FOREIGN KEY (pro_codigo)
+      REFERENCES produto (pro_codigo) MATCH SIMPLE
+      ON UPDATE RESTRICT ON DELETE RESTRICT,
+  CONSTRAINT fk_usuario_quebra FOREIGN KEY (usu_codigo)
+      REFERENCES usuario (usu_codigo) MATCH SIMPLE
+      ON UPDATE RESTRICT ON DELETE RESTRICT
+)
+WITH OIDS;
+ALTER TABLE quebra OWNER TO postgres;
+
+-- Index: ix_fk_produto_quebra
+
+-- DROP INDEX ix_fk_produto_quebra;
+
+CREATE INDEX ix_fk_produto_quebra
+  ON quebra
+  USING btree
+  (pro_codigo);
+
+-- Index: ix_fk_usuario_quebra
+
+-- DROP INDEX ix_fk_usuario_quebra;
+
+CREATE INDEX ix_fk_usuario_quebra
+  ON quebra
+  USING btree
+  (usu_codigo);
+
+-- Table: saldo_caixa
+
+-- DROP TABLE saldo_caixa;
+
+CREATE TABLE saldo_caixa
+(
+  sal_cai_codigo double precision NOT NULL,
+  sal_cai_valor numeric(15,2) NOT NULL,
+  sal_cai_data date NOT NULL,
+  CONSTRAINT pk_saldo_caixa PRIMARY KEY (sal_cai_codigo)
+)
+WITH OIDS;
+ALTER TABLE saldo_caixa OWNER TO postgres;
+
+-- Table: tipo_telefone
+
+-- DROP TABLE tipo_telefone;
+
+CREATE TABLE tipo_telefone
+(
+  tip_codigo integer NOT NULL,
+  tip_descricao character varying(20) NOT NULL,
+  CONSTRAINT pk_tipo_telefone PRIMARY KEY (tip_codigo)
+)
+WITH OIDS;
+ALTER TABLE tipo_telefone OWNER TO postgres;
+
+
+-- Table: telefone
+
+-- DROP TABLE telefone;
+
+CREATE TABLE telefone
+(
+  tel_codigo integer NOT NULL,
+  tel_numero character varying(20) NOT NULL,
+  tel_contato character varying(40),
+  tip_codigo integer NOT NULL,
+  pes_codigo integer NOT NULL,
+  CONSTRAINT pk_telefone PRIMARY KEY (tel_codigo, tip_codigo, pes_codigo),
+  CONSTRAINT fk_pessoa_telefone FOREIGN KEY (pes_codigo)
+      REFERENCES pessoa (pes_codigo) MATCH SIMPLE
+      ON UPDATE RESTRICT ON DELETE RESTRICT,
+  CONSTRAINT fk_tipo_telefone FOREIGN KEY (tip_codigo)
+      REFERENCES tipo_telefone (tip_codigo) MATCH SIMPLE
+      ON UPDATE RESTRICT ON DELETE RESTRICT
+)
+WITH OIDS;
+ALTER TABLE telefone OWNER TO postgres;
+
+-- Index: ix_fk_pessoa_telefone
+
+-- DROP INDEX ix_fk_pessoa_telefone;
+
+CREATE INDEX ix_fk_pessoa_telefone
+  ON telefone
+  USING btree
+  (pes_codigo);
+
+-- Index: ix_fk_tipo_telefone
+
+-- DROP INDEX ix_fk_tipo_telefone;
+
+CREATE INDEX ix_fk_tipo_telefone
+  ON telefone
+  USING btree
+  (tip_codigo);
+

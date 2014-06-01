@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="1.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
+  <persistence-unit name="CerealistaPU" transaction-type="RESOURCE_LOCAL">
+    <provider>oracle.toplink.essentials.PersistenceProvider</provider>
+    <class>classe.entidade.Acao</class>
+    <class>classe.entidade.Acesso</class>
+    <class>classe.entidade.AcessoUsuario</class>
+    <class>classe.entidade.Auditoria</class>
+    <class>classe.entidade.Autenticacao</class>
+    <class>classe.entidade.Banco</class>
+    <class>classe.entidade.Caixa</class>
+    <class>classe.entidade.Categoria</class>
+    <class>classe.entidade.CategoriaDespesa</class>
+    <class>classe.entidade.Cidade</class>
+    <class>classe.entidade.Conta</class>
+    <class>classe.entidade.Despesa</class>
+    <class>classe.entidade.FormaPagamento</class>
+    <class>classe.entidade.HorasTrabalhadas</class>
+    <class>classe.entidade.Ordem</class>
+    <class>classe.entidade.OrdemProduto</class>
+    <class>classe.entidade.PagamentoFuncionario</class>
+    <class>classe.entidade.PagamentoOrdem</class>
+    <class>classe.entidade.Pessoa</class>
+    <class>classe.entidade.PessoaCategoria</class>
+    <class>classe.entidade.Produto</class>
+    <class>classe.entidade.ProdutoVenda</class>
+    <class>classe.entidade.Quebra</class>
+    <class>classe.entidade.SaldoCaixa</class>
+    <class>classe.entidade.Telefone</class>
+    <class>classe.entidade.TipoTelefone</class>
+    <class>classe.entidade.UnidadeMedida</class>
+    <class>classe.entidade.Usuario</class>
+    <class>classe.entidade.Veiculo</class>
+    <class>classe.entidade.Venda</class>
+    <exclude-unlisted-classes>true</exclude-unlisted-classes>
+    <properties>
+      <property name="toplink.jdbc.user" value="th36077"/>
+      <property name="toplink.jdbc.password" value="TCySemEwJ4"/>
+      <property name="toplink.jdbc.url" value="jdbc:postgresql://localhost:5432/th36077_cerealista"/>
+      <property name="toplink.jdbc.driver" value="org.postgresql.Driver"/>
+    </properties>
+  </persistence-unit>
+</persistence>

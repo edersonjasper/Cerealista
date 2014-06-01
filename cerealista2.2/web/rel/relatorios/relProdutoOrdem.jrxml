@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relProdutoOrdem" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<style name="Zebra" isDefault="false">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean( $V{REPORT_COUNT}.intValue() % 2 == 0)]]></conditionExpression>
+			<style isDefault="false" style="Zebra" mode="Opaque" forecolor="#000000" backcolor="#C0C0C0"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="data1" class="java.util.Date"/>
+	<parameter name="data2" class="java.util.Date"/>
+	<queryString>
+		<![CDATA[SELECT
+     produto."pro_nome" AS produto_pro_nome,
+     ordem_produto."ord_pro_codigo" AS ordem_produto_ord_pro_codigo,
+     ordem_produto."ord_pro_quantidade" AS ordem_produto_ord_pro_quantidade,
+     ordem_produto."ord_pro_valor_unitario" AS ordem_produto_ord_pro_valor_unitario,
+     ordem_produto."ord_pro_valor_total" AS ordem_produto_ord_pro_valor_total,
+     ordem_produto."ord_pro_peso_unitario" AS ordem_produto_ord_pro_peso_unitario,
+     ordem_produto."ord_pro_peso_total" AS ordem_produto_ord_pro_peso_total,
+     ordem."ord_data" AS ordem_ord_data
+FROM
+     "public"."produto" produto INNER JOIN "public"."ordem_produto" ordem_produto ON produto."pro_codigo" = ordem_produto."pro_codigo"
+     INNER JOIN "public"."ordem" ordem ON ordem_produto."ord_codigo" = ordem."ord_codigo"
+WHERE
+     ordem."ord_data" >= $P{data1}
+ AND ordem."ord_data" <= $P{data2}
+ORDER BY
+     produto."pro_nome" ,
+ordem."ord_data" ASC]]>
+	</queryString>
+	<field name="produto_pro_nome" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ordem_produto_ord_pro_codigo" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ordem_produto_ord_pro_quantidade" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ordem_produto_ord_pro_valor_unitario" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ordem_produto_ord_pro_valor_total" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ordem_produto_ord_pro_peso_unitario" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ordem_produto_ord_pro_peso_total" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ordem_ord_data" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<variable name="totQuant" class="java.lang.Double" resetType="Group" resetGroup="produto_pro_nome" calculation="Sum">
+		<variableExpression><![CDATA[$F{ordem_produto_ord_pro_quantidade}]]></variableExpression>
+	</variable>
+	<variable name="totPesoUnit" class="java.lang.Double" resetType="Group" resetGroup="produto_pro_nome" calculation="Sum">
+		<variableExpression><![CDATA[$F{ordem_produto_ord_pro_peso_unitario}]]></variableExpression>
+	</variable>
+	<variable name="totPesoTot" class="java.lang.Double" resetType="Group" resetGroup="produto_pro_nome" calculation="Sum">
+		<variableExpression><![CDATA[$F{ordem_produto_ord_pro_peso_total}]]></variableExpression>
+	</variable>
+	<variable name="totValorTot" class="java.lang.Double" resetType="Group" resetGroup="produto_pro_nome" calculation="Sum">
+		<variableExpression><![CDATA[$F{ordem_produto_ord_pro_valor_total}]]></variableExpression>
+	</variable>
+	<group name="produto_pro_nome">
+		<groupExpression><![CDATA[$F{produto_pro_nome}]]></groupExpression>
+	</group>
+	<group name="Produto">
+		<groupExpression><![CDATA[$F{produto_pro_nome}]]></groupExpression>
+		<groupHeader>
+			<band height="26">
+				<staticText>
+					<reportElement x="0" y="3" width="37" height="15"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Código]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="40" y="3" width="42" height="15"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Produto]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="392" y="3" width="72" height="15"/>
+					<textElement textAlignment="Right">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Valor Unit. R$]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="212" y="3" width="50" height="15"/>
+					<textElement textAlignment="Right">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Quant.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="264" y="3" width="57" height="15"/>
+					<textElement textAlignment="Right">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Peso Unit.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="141" y="3" width="71" height="15"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Data]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="326" y="3" width="56" height="15"/>
+					<textElement textAlignment="Right">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Peso Total]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="476" y="3" width="77" height="15"/>
+					<textElement textAlignment="Right">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Valor Total R$]]></text>
+				</staticText>
+				<line>
+					<reportElement x="0" y="21" width="555" height="1"/>
+				</line>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="48">
+				<textField pattern="#,##0.00">
+					<reportElement x="192" y="7" width="70" height="20"/>
+					<textElement textAlignment="Right">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.Double"><![CDATA[$V{totQuant}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="0" y="3" width="555" height="1"/>
+				</line>
+				<staticText>
+					<reportElement x="148" y="7" width="44" height="20"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Total:]]></text>
+				</staticText>
+				<textField pattern="#,##0.00">
+					<reportElement x="264" y="7" width="57" height="20"/>
+					<textElement textAlignment="Right">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.Double"><![CDATA[$V{totPesoUnit}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00">
+					<reportElement x="326" y="7" width="56" height="20"/>
+					<textElement textAlignment="Right">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.Double"><![CDATA[$V{totPesoTot}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00">
+					<reportElement x="476" y="7" width="77" height="20"/>
+					<textElement textAlignment="Right">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.Double"><![CDATA[$V{totValorTot}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="0" y="27" width="555" height="1"/>
+				</line>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="54" splitType="Stretch">
+			<staticText>
+				<reportElement x="176" y="13" width="200" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Entrada de Produtos]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy HH:mm:ss">
+				<reportElement x="430" y="13" width="123" height="20"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="3" y="13" width="66" height="20"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression class="java.util.Date"><![CDATA[$P{data1}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="75" y="13" width="17" height="20"/>
+				<textElement verticalAlignment="Bottom"/>
+				<text><![CDATA[até]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="99" y="13" width="66" height="20"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression class="java.util.Date"><![CDATA[$P{data2}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<detail>
+		<band height="19">
+			<textField>
+				<reportElement style="Zebra" stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="3" width="37" height="16"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{ordem_produto_ord_pro_codigo}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement style="Zebra" stretchType="RelativeToBandHeight" mode="Opaque" x="141" y="3" width="71" height="16"/>
+				<textElement/>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{ordem_ord_data}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Zebra" stretchType="RelativeToBandHeight" mode="Opaque" x="40" y="3" width="100" height="16"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{produto_pro_nome}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement style="Zebra" stretchType="RelativeToBandHeight" mode="Opaque" x="212" y="3" width="50" height="16"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{ordem_produto_ord_pro_quantidade}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement style="Zebra" stretchType="RelativeToBandHeight" mode="Opaque" x="264" y="3" width="57" height="16"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{ordem_produto_ord_pro_peso_unitario}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement style="Zebra" stretchType="RelativeToBandHeight" mode="Opaque" x="326" y="3" width="56" height="16"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{ordem_produto_ord_pro_peso_total}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement style="Zebra" stretchType="RelativeToBandHeight" mode="Opaque" x="392" y="3" width="72" height="16"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{ordem_produto_ord_pro_valor_unitario}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement style="Zebra" stretchType="RelativeToBandHeight" mode="Opaque" x="476" y="3" width="77" height="16"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{ordem_produto_ord_pro_valor_total}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="34" splitType="Stretch">
+			<textField>
+				<reportElement x="416" y="10" width="80" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="502" y="10" width="40" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="6" width="555" height="1"/>
+			</line>
+		</band>
+	</pageFooter>
+	<noData>
+		<band height="63">
+			<staticText>
+				<reportElement x="27" y="7" width="282" height="27"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Não há registro entre as datas:]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="438" y="7" width="110" height="27"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[$P{data2}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="316" y="7" width="110" height="27"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[$P{data1}]]></textFieldExpression>
+			</textField>
+		</band>
+	</noData>
+</jasperReport>

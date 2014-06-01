@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relOrdemProduto" language="groovy" pageWidth="537" pageHeight="842" columnWidth="537" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<parameter name="ordCod" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT
+     ordem_produto."ord_pro_codigo" AS ordem_produto_ord_pro_codigo,
+     ordem_produto."ord_pro_peso_total" AS ordem_produto_ord_pro_peso_total,
+     ordem_produto."ord_pro_peso_unitario" AS ordem_produto_ord_pro_peso_unitario,
+     ordem_produto."ord_pro_valor_total" AS ordem_produto_ord_pro_valor_total,
+     ordem_produto."ord_pro_valor_unitario" AS ordem_produto_ord_pro_valor_unitario,
+     ordem_produto."ord_pro_quantidade" AS ordem_produto_ord_pro_quantidade,
+     produto."pro_nome" AS produto_pro_nome,
+     unidade_medida."uni_med_descricao" AS unidade_medida_uni_med_descricao
+FROM
+     "public"."produto" produto INNER JOIN "public"."ordem_produto" ordem_produto ON produto."pro_codigo" = ordem_produto."pro_codigo"
+     INNER JOIN "public"."unidade_medida" unidade_medida ON produto."uni_med_codigo" = unidade_medida."uni_med_codigo"
+     INNER JOIN "public"."ordem" ordem ON ordem_produto."ord_codigo" = ordem."ord_codigo"
+WHERE
+     ordem_produto."ord_codigo" = $P{ordCod}]]>
+	</queryString>
+	<field name="ordem_produto_ord_pro_codigo" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ordem_produto_ord_pro_peso_total" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ordem_produto_ord_pro_peso_unitario" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ordem_produto_ord_pro_valor_total" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ordem_produto_ord_pro_valor_unitario" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ordem_produto_ord_pro_quantidade" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="produto_pro_nome" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="unidade_medida_uni_med_descricao" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<group name="produto_pro_nome">
+		<groupExpression><![CDATA[$F{produto_pro_nome}]]></groupExpression>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="32" splitType="Stretch">
+			<staticText>
+				<reportElement x="9" y="7" width="34" height="20"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cód.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="205" y="8" width="47" height="20"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Quant.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="54" y="7" width="99" height="20"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Produto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="263" y="8" width="55" height="20"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Peso Unit.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="329" y="8" width="51" height="20"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Peso Tot.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="391" y="8" width="60" height="20"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Vlr. Un. R$]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="462" y="9" width="58" height="20"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Vlr. Tot. R$]]></text>
+			</staticText>
+			<line>
+				<reportElement x="3" y="29" width="530" height="2"/>
+			</line>
+			<staticText>
+				<reportElement x="164" y="8" width="30" height="20"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Unid.]]></text>
+			</staticText>
+			<line>
+				<reportElement x="48" y="8" width="1" height="21"/>
+			</line>
+			<line>
+				<reportElement x="158" y="8" width="1" height="21"/>
+			</line>
+			<line>
+				<reportElement x="199" y="8" width="1" height="21"/>
+			</line>
+			<line>
+				<reportElement x="257" y="8" width="1" height="21"/>
+			</line>
+			<line>
+				<reportElement x="385" y="8" width="1" height="21"/>
+			</line>
+			<line>
+				<reportElement x="456" y="8" width="1" height="21"/>
+			</line>
+			<line>
+				<reportElement x="323" y="8" width="1" height="21"/>
+			</line>
+			<line>
+				<reportElement x="534" y="8" width="1" height="21"/>
+			</line>
+			<line>
+				<reportElement x="3" y="5" width="530" height="2"/>
+			</line>
+			<line>
+				<reportElement x="3" y="7" width="1" height="21"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="25" splitType="Stretch">
+			<line>
+				<reportElement x="534" y="0" width="1" height="23"/>
+			</line>
+			<line>
+				<reportElement x="3" y="0" width="1" height="23"/>
+			</line>
+			<line>
+				<reportElement x="257" y="0" width="1" height="23"/>
+			</line>
+			<textField>
+				<reportElement x="9" y="1" width="34" height="20"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{ordem_produto_ord_pro_codigo}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,###,##0.000">
+				<reportElement x="205" y="1" width="47" height="20"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{ordem_produto_ord_pro_quantidade}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,###,##0.000">
+				<reportElement x="263" y="1" width="55" height="20"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{ordem_produto_ord_pro_peso_unitario}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="164" y="1" width="30" height="20"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{unidade_medida_uni_med_descricao}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="48" y="0" width="1" height="23"/>
+			</line>
+			<line>
+				<reportElement x="199" y="0" width="1" height="23"/>
+			</line>
+			<line>
+				<reportElement x="323" y="0" width="1" height="23"/>
+			</line>
+			<line>
+				<reportElement x="385" y="0" width="1" height="23"/>
+			</line>
+			<line>
+				<reportElement x="456" y="0" width="1" height="23"/>
+			</line>
+			<line>
+				<reportElement x="3" y="23" width="530" height="1"/>
+			</line>
+			<textField>
+				<reportElement x="54" y="1" width="99" height="20"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{produto_pro_nome}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,###,##0.000">
+				<reportElement x="329" y="1" width="51" height="20"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{ordem_produto_ord_pro_peso_total}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,###,##0.00">
+				<reportElement x="467" y="1" width="58" height="20"/>
+				<textElement textAlignment="Right">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{ordem_produto_ord_pro_valor_total}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,###,##0.00">
+				<reportElement x="391" y="1" width="60" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{ordem_produto_ord_pro_valor_unitario}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="158" y="0" width="1" height="23"/>
+			</line>
+		</band>
+	</detail>
+</jasperReport>
